@@ -1,0 +1,37 @@
+databases:
+  - name: exam_bread_db
+    databaseName: exam_bread
+    user: exam_bread_user
+    plan: free
+
+services:
+  - type: web
+    name: exam-bread-api
+    env: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: exam_bread_db
+          property: connectionString
+
+  - type: web
+    name: exam-bread-frontend
+    env: static
+    rootDir: frontend
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: exam-bread-api
+          envVarKey: RENDER_EXTERNAL_URL
