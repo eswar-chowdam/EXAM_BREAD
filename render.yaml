@@ -22,19 +22,3 @@ services:
           name: exam_bread_db
           property: connectionString
 
-  - type: web
-    name: exam-bread-frontend
-    env: static
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    staticPublishPath: ./dist
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
-    envVars:
-      - key: VITE_API_BASE_URL
-        fromService:
-          type: web
-          name: exam-bread-api
-          envVarKey: RENDER_EXTERNAL_URL
