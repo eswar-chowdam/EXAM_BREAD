@@ -22,8 +22,9 @@ services:
           name: exam_bread_db
           property: connectionString
 
-  - type: static_site
+  - type: web
     name: exam-bread-frontend
+    env: static
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
